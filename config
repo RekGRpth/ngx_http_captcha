@@ -15,7 +15,7 @@ if test -n "$ngx_module_link"; then
     ngx_module_incs="/usr/include/ImageMagick-6"
     ngx_module_deps=
     ngx_module_srcs="$ngx_addon_dir/ngx_http_captcha_module.c"
-    ngx_module_libs=
+    ngx_module_libs="`MagickWand-config --ldflags`"
 
     . auto/module
 else
