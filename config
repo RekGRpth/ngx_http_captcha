@@ -1,21 +1,32 @@
-ngx_feature="MagickWand"
-ngx_feature_name=
-ngx_feature_run=no
-ngx_feature_incs="#include <wand/magick-wand.h>"
-ngx_feature_path="/usr/include/ImageMagick"
-ngx_feature_libs=-lMagickWand
-ngx_feature_test="MagickWandGenesis()"
-. auto/feature
+#ngx_feature="MagickWand"
+#ngx_feature_name=
+#ngx_feature_run=no
+#ngx_feature_incs="#include <wand/magick-wand.h>"
+#ngx_feature_path="/usr/include/ImageMagick"
+#ngx_feature_libs=-lMagickWand
+#ngx_feature_test="MagickWandGenesis()"
+#. auto/feature
 
-if [ $ngx_found = yes ]; then
+#if [ $ngx_found = yes ]; then
     ngx_addon_name=ngx_http_captcha_module
+if test -n "$ngx_module_link"; then
+    ngx_module_type=HTTP
+    ngx_module_name=$ngx_addon_name
+    ngx_module_incs="/usr/include/ImageMagick-6"
+    ngx_module_deps=
+    ngx_module_srcs="$ngx_addon_dir/ngx_http_captcha_module.c"
+    ngx_module_libs=
+
+    . auto/module
+else
     HTTP_MODULES="$HTTP_MODULES ngx_http_captcha_module"
     NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/ngx_http_captcha_module.c"
     CORE_LIBS="$CORE_LIBS -lMagickWand"
-    CFLAGS="$CFLAGS `MagickWand-config --cflags`"
-else
-    cat << END
-$0: error: the Captcha addon requires the ImageMagick library.
-END
-    exit 1
 fi
+    CFLAGS="$CFLAGS `MagickWand-config --cflags`"
+#else
+#    cat << END
+#$0: error: the Captcha addon requires the ImageMagick library.
+#END
+#    exit 1
+#fi
